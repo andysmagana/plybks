@@ -1,0 +1,24 @@
+--- # ANTIVIRUS PLAYBOOK
+- hosts: apacheweb
+  user: test
+  become: true
+  connection: ssh
+  gather_facts: no
+  tasks:
+    - name: copy source to destination and untar CM-190293-vscl-l64-605-l.tar.gz
+      file: path=/usr/local/uvscan state=directory
+    - name: untar mcafee virus scanner engine
+      unarchive: src=/home/test/CM-190293-vscl-l64-605-l.tar.gz dest=/usr/local/uvscan/ copy=yes
+    - name: Recursive ownership of uvscan directory
+      file: path=/usr/local/uvscan mode=0744 owner=root group=root recurse=yes
+    - name: installing the McAfee Virus Engine
+      expect:
+        command: /home/test/uvscan/install-uvscan
+        responses:
+          "Which directory do you want to install into? [/usr/local/uvscan]": /n
+          "/usr/local/uvscan doesn\'t exist. Create it? [y]/n": /n
+          "Do you want to create the link(s) to uvscan in /usr/local/bin [y]/n": /n
+          "Do you want to create the link(s) to uvscan_secure in /usr/local/bin [y]/n": /n
+          "Do you want to create the link(s) to uvscan.1 in /usr/local/man/man1 [y]/n": /n
+          "/usr/local/man/man1 doesn\'t exist. Create it? [y]/n": /n
+          "Do you want to perform a scan of all filesystems y/[n]": /n
