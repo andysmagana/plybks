@@ -13,7 +13,7 @@
       file: path=/usr/local/uvscan mode=0744 owner=root group=root recurse=yes
     - name: installing the McAfee Virus Engine
       expect:
-        command: /home/test/uvscan/install-uvscan
+        command: /usr/local/uvscan/install-uvscan
         responses:
           "Which directory do you want to install into? [/usr/local/uvscan]": /n
           "/usr/local/uvscan doesn\'t exist. Create it? [y]/n": /n
